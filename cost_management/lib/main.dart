@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import './transaction.dart';
@@ -16,6 +17,10 @@ class Parent extends StatelessWidget {
 }
 
 class MyApp extends StatelessWidget {
+  // String? title, amount;
+  var title = TextEditingController();
+  var amount = TextEditingController();
+
   List<Transaction> transaction = [
     Transaction(
         id: "t1", title: "New Shoes", amount: 99.00, date: DateTime.now()),
@@ -51,8 +56,10 @@ class MyApp extends StatelessWidget {
                 children: [
                   Container(
                     margin: const EdgeInsets.only(bottom: 15),
-                    child: const TextField(
-                      decoration: InputDecoration(
+                    child: TextField(
+                      // onChanged: (value) => title = value,
+                      controller: title,
+                      decoration: const InputDecoration(
                           hintText: 'Title',
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -65,8 +72,10 @@ class MyApp extends StatelessWidget {
                   ),
                   Container(
                     margin: const EdgeInsets.only(bottom: 15),
-                    child: const TextField(
-                      decoration: InputDecoration(
+                    child: TextField(
+                      // onChanged: (value) => amount = value,
+                      controller: amount,
+                      decoration: const InputDecoration(
                         hintText: 'Amount',
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -79,7 +88,12 @@ class MyApp extends StatelessWidget {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // print(title);
+                      // print(amount);
+                      print(title.text);
+                      print(amount.text);
+                    },
                     child: const Text('Submit'),
                     style: TextButton.styleFrom(
                       primary: Colors.blue,
