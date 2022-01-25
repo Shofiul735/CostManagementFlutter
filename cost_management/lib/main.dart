@@ -37,16 +37,57 @@ class MyApp extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(15.0),
               color: Colors.amberAccent,
-              child: const Text(
-                "Card-2",
+              child: Text(
+                "Chart".toUpperCase(),
                 textAlign: TextAlign.center,
               ),
             ),
           ),
-          const Card(
-            child: Text(
-              "Card-2",
-              textAlign: TextAlign.center,
+          Card(
+            child: Container(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 15),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                          hintText: 'Title',
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.blueAccent,
+                              width: 2,
+                              style: BorderStyle.solid,
+                            ),
+                          )),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 15),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Amount',
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.blueAccent,
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('Submit'),
+                    style: TextButton.styleFrom(
+                      primary: Colors.blue,
+                      backgroundColor: Colors.amber,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Column(
@@ -55,8 +96,8 @@ class MyApp extends StatelessWidget {
                   child: Row(
                 children: [
                   Container(
-                    margin: EdgeInsets.all(10),
-                    padding: EdgeInsets.all(15),
+                    margin: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(15),
                     decoration: BoxDecoration(
                       border: Border.all(
                           color: Colors.purple,
@@ -66,7 +107,7 @@ class MyApp extends StatelessWidget {
                     child: Text(
                       '\$${item.amount}',
                       textAlign: TextAlign.start,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.purple,
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -78,14 +119,14 @@ class MyApp extends StatelessWidget {
                       children: [
                         Text(
                           item.title,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
                         Text(
                           DateFormat.yMMMd().format(item.date),
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.grey,
                           ),
                         ),
