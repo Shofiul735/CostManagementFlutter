@@ -11,6 +11,24 @@ class Parent extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter App',
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        fontFamily: 'Quicksand',
+        textTheme: Theme.of(context).textTheme.copyWith(
+              headline6: const TextStyle(
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+        appBarTheme: const AppBarTheme(
+          titleTextStyle: TextStyle(
+            fontFamily: 'OpenSans',
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+      ),
       home: MyHomePage(),
     );
   }
@@ -26,13 +44,13 @@ class MyHomePage extends StatefulWidget {
 class _MyApp extends State<MyHomePage> {
   // String? title, amount;
 
-  List<Transaction> transactions = [
-    Transaction(
-        id: "t1", title: "New Shoes", amount: 99.00, date: DateTime.now()),
-    Transaction(
-        id: "t2", title: "New Books", amount: 9.99, date: DateTime.now())
-  ];
-
+  // List<Transaction> transactions = [
+  //   Transaction(
+  //       id: "t1", title: "New Shoes", amount: 99.00, date: DateTime.now()),
+  //   Transaction(
+  //       id: "t2", title: "New Books", amount: 9.99, date: DateTime.now())
+  // ];
+  List<Transaction> transactions = [];
   void addTransaction(String titleText, double amountTxt) {
     var tx = Transaction(
         id: DateTime.now().toString(),
@@ -47,7 +65,7 @@ class _MyApp extends State<MyHomePage> {
   void showAddTransaction(BuildContext ctx) {
     showModalBottomSheet(
         context: ctx,
-        builder: (_) {
+        builder: (bCtx) {
           return NewTransaction(addTransaction);
         });
   }
