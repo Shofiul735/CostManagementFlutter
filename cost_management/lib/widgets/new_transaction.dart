@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 
-class NewTransation extends StatelessWidget {
+class NewTransaction extends StatefulWidget {
+  Function inputHandler;
+  NewTransaction(this.inputHandler);
+  @override
+  State<StatefulWidget> createState() {
+    return NewTransactionState();
+  }
+}
+
+class NewTransactionState extends State<NewTransaction> {
   final title = TextEditingController();
   final amount = TextEditingController();
-  Function inputHandler;
-  NewTransation(this.inputHandler);
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -18,6 +26,7 @@ class NewTransation extends StatelessWidget {
               child: TextField(
                 // onChanged: (value) => title = value,
                 controller: title,
+                keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
                   hintText: 'Title',
                   border: OutlineInputBorder(
@@ -35,6 +44,8 @@ class NewTransation extends StatelessWidget {
               child: TextField(
                 // onChanged: (value) => amount = value,
                 controller: amount,
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 decoration: const InputDecoration(
                   hintText: 'Amount',
                   border: OutlineInputBorder(
@@ -51,7 +62,8 @@ class NewTransation extends StatelessWidget {
               onPressed: () {
                 // print(title);
                 // print(amount);
-                inputHandler(title.text, double.parse(amount.text));
+                widget.inputHandler(title.text, double.parse(amount.text));
+                Navigator.of(context).pop();
               },
               child: const Text('Submit'),
               style: TextButton.styleFrom(
