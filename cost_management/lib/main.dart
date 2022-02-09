@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './widgets/transaction_card.dart';
 import './widgets/new_transaction.dart';
+import './widgets/chart.dart';
 import './models/transaction.dart';
 
 void main() => runApp(Parent());
@@ -62,6 +63,16 @@ class _MyApp extends State<MyHomePage> {
     });
   }
 
+  List<Transaction> get _recentTransactions {
+    return transactions.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
+
   void showAddTransaction(BuildContext ctx) {
     showModalBottomSheet(
         context: ctx,
@@ -94,9 +105,7 @@ class _MyApp extends State<MyHomePage> {
                 padding: const EdgeInsets.all(15.0),
                 color: Colors.amberAccent,
                 alignment: Alignment.center,
-                child: Text(
-                  "Chart".toUpperCase(),
-                ),
+                child: Chart(_recentTransactions),
               ),
             ),
             TransactionCard(transactions),

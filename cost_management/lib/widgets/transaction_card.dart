@@ -34,43 +34,41 @@ class TransactionCard extends StatelessWidget {
               itemCount: transactions.length,
               itemBuilder: (context, index) {
                 return Card(
-                    child: Row(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(10),
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Theme.of(context).primaryColor,
-                            width: 2.0,
-                            style: BorderStyle.solid),
-                      ),
-                      child: Text(
-                        '\$${transactions[index].amount.toStringAsFixed(2)}',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 7),
+                  elevation: 3,
+                  child: ListTile(
+                    leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            transactions[index].title,
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                          Text(
-                            DateFormat.yMMMd().format(transactions[index].date),
-                            style: const TextStyle(
-                              color: Colors.grey,
+                          Container(
+                            width: 80,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 10),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Theme.of(context).primaryColor,
+                                width: 2,
+                                style: BorderStyle.solid,
+                              ),
+                            ),
+                            child: FittedBox(
+                              child: Text(
+                                '\$${transactions[index].amount.toStringAsFixed(2)}',
+                                style: Theme.of(context).textTheme.headline6,
+                              ),
                             ),
                           ),
-                        ])
-                  ],
-                ));
+                        ]),
+                    title: Text(
+                      transactions[index].title,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    subtitle: Text(
+                      DateFormat.yMMMEd().format(transactions[index].date),
+                    ),
+                  ),
+                );
               },
             ),
     );
