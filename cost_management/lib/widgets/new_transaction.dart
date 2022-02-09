@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
   Function inputHandler;
@@ -12,6 +13,20 @@ class NewTransaction extends StatefulWidget {
 class NewTransactionState extends State<NewTransaction> {
   final title = TextEditingController();
   final amount = TextEditingController();
+  DateTime? date;
+  void _showDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(DateTime.now().year),
+      lastDate: DateTime.now(),
+    ).then((value) {
+      if (value == null) return;
+      setState(() {
+        date = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,17 +73,46 @@ class NewTransactionState extends State<NewTransaction> {
                 ),
               ),
             ),
-            TextButton(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  date == null
+                      ? 'No Date Chosen!'
+                      : DateFormat.MMMMd().format(date!).toString(),
+                ),
+                TextButton(
+                  onPressed: _showDatePicker,
+                  child: const Text(
+                    'Choose a Date',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            ElevatedButton(
               onPressed: () {
                 // print(title);
                 // print(amount);
-                widget.inputHandler(title.text, double.parse(amount.text));
+                widget.inputHandler(
+                    title.text, double.parse(amount.text), date);
                 Navigator.of(context).pop();
               },
-              child: const Text('Submit'),
-              style: TextButton.styleFrom(
-                primary: Colors.blue,
-                backgroundColor: Colors.amber,
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 7),
+                child: Text(
+                  'Submit',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColor,
+                onPrimary: Theme.of(context).textTheme.button!.color,
               ),
             ),
           ],

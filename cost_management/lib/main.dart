@@ -21,6 +21,9 @@ class Parent extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               ),
+              button: const TextStyle(
+                color: Colors.white,
+              ),
             ),
         appBarTheme: const AppBarTheme(
           titleTextStyle: TextStyle(
@@ -52,14 +55,21 @@ class _MyApp extends State<MyHomePage> {
   //       id: "t2", title: "New Books", amount: 9.99, date: DateTime.now())
   // ];
   List<Transaction> transactions = [];
-  void addTransaction(String titleText, double amountTxt) {
+  void addTransaction(String titleText, double amountTxt, DateTime userDate) {
     var tx = Transaction(
-        id: DateTime.now().toString(),
-        title: titleText,
-        amount: amountTxt,
-        date: DateTime.now());
+      id: DateTime.now().toString(),
+      title: titleText,
+      amount: amountTxt,
+      date: userDate,
+    );
     setState(() {
       transactions.add(tx);
+    });
+  }
+
+  void deleteTransaction(String id) {
+    setState(() {
+      transactions.removeWhere((element) => element.id == id);
     });
   }
 
@@ -108,7 +118,7 @@ class _MyApp extends State<MyHomePage> {
                 child: Chart(_recentTransactions),
               ),
             ),
-            TransactionCard(transactions),
+            TransactionCard(transactions, deleteTransaction),
           ],
         ),
       ),
