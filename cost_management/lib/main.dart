@@ -93,18 +93,19 @@ class _MyApp extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: const Text("Cost Management App!"),
+      actions: [
+        IconButton(
+          onPressed: () => showAddTransaction(context),
+          icon: const Icon(
+            Icons.add,
+          ),
+        )
+      ],
+    );
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Cost Management App!"),
-        actions: [
-          IconButton(
-            onPressed: () => showAddTransaction(context),
-            icon: const Icon(
-              Icons.add,
-            ),
-          )
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -115,10 +116,24 @@ class _MyApp extends State<MyHomePage> {
                 padding: const EdgeInsets.all(15.0),
                 color: Colors.amberAccent,
                 alignment: Alignment.center,
-                child: Chart(_recentTransactions),
+                child: SizedBox(
+                    height: (MediaQuery.of(context).size.height -
+                            MediaQuery.of(context).padding.top -
+                            MediaQuery.of(context).padding.bottom -
+                            kToolbarHeight -
+                            appBar.preferredSize.height) *
+                        0.3,
+                    child: Chart(_recentTransactions)),
               ),
             ),
-            TransactionCard(transactions, deleteTransaction),
+            SizedBox(
+                height: (MediaQuery.of(context).size.height -
+                        MediaQuery.of(context).padding.top -
+                        MediaQuery.of(context).padding.bottom -
+                        kToolbarHeight -
+                        appBar.preferredSize.height) *
+                    0.7,
+                child: TransactionCard(transactions, deleteTransaction)),
           ],
         ),
       ),
