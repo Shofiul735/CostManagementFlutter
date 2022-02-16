@@ -10,24 +10,26 @@ class TransactionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return transactions.isEmpty
-        ? Column(
-            children: [
-              Text(
-                'No contant available!',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                height: 250,
-                child: Image.asset(
-                  'assets/images/waiting.png',
-                  fit: BoxFit.cover,
+        ? LayoutBuilder(builder: (bCtx, constrains) {
+            return Column(
+              children: [
+                Text(
+                  'No contant available!',
+                  style: Theme.of(context).textTheme.headline6,
                 ),
-              ),
-            ],
-          )
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  height: constrains.maxHeight * 0.7,
+                  child: Image.asset(
+                    'assets/images/waiting.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+            );
+          })
         : ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: transactions.length,
