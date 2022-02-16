@@ -104,8 +104,65 @@ class _MyApp extends State<MyHomePage> {
         });
   }
 
+  Row showSwitchButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          'Show List',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 25,
+          ),
+        ),
+        const SizedBox(
+          width: 15,
+        ),
+        Switch(
+          value: _showList,
+          onChanged: (value) {
+            changeSwitchValue(value);
+          },
+        ),
+      ],
+    );
+  }
+
+  Card showChartWithHeight(double heightRation, AppBar appBar) {
+    return Card(
+      child: Container(
+        padding: const EdgeInsets.all(15.0),
+        color: Colors.amberAccent,
+        alignment: Alignment.center,
+        child: SizedBox(
+          height: (MediaQuery.of(context).size.height -
+                  MediaQuery.of(context).padding.top -
+                  MediaQuery.of(context).padding.bottom -
+                  kToolbarHeight -
+                  appBar.preferredSize.height) *
+              heightRation,
+          child: Chart(_recentTransactions),
+        ),
+      ),
+    );
+  }
+
+  SizedBox showTransactionList(double height, AppBar appBar) {
+    return SizedBox(
+      height: (MediaQuery.of(context).size.height -
+              MediaQuery.of(context).padding.top -
+              MediaQuery.of(context).padding.bottom -
+              kToolbarHeight -
+              appBar.preferredSize.height) *
+          height,
+      child: TransactionCard(transactions, deleteTransaction),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final appBar = AppBar(
       title: const Text("Cost Management App!"),
       actions: [
@@ -124,58 +181,16 @@ class _MyApp extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Show List',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                  ),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Switch(
-                  value: _showList,
-                  onChanged: (value) {
-                    changeSwitchValue(value);
-                  },
-                ),
-              ],
-            ),
-            !_showList
-                ? Card(
-                    child: Container(
-                      padding: const EdgeInsets.all(15.0),
-                      color: Colors.amberAccent,
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        height: (MediaQuery.of(context).size.height -
-                                MediaQuery.of(context).padding.top -
-                                MediaQuery.of(context).padding.bottom -
-                                kToolbarHeight -
-                                appBar.preferredSize.height) *
-                            0.7,
-                        child: Chart(_recentTransactions),
-                      ),
-                    ),
-                  )
-                : SizedBox(
-                    height: (MediaQuery.of(context).size.height -
-                            MediaQuery.of(context).padding.top -
-                            MediaQuery.of(context).padding.bottom -
-                            kToolbarHeight -
-                            appBar.preferredSize.height) *
-                        0.7,
-                    child: TransactionCard(transactions, deleteTransaction),
-                  ),
+            if (isLandscape) showSwitchButton(),
+            if (isLandscape && !_showList) showChartWithHeight(0.7, appBar),
+            if (isLandscape && _showList) showTransactionList(0.8, appBar),
+            if (!isLandscape) showChartWithHeight(0.3, appBar),
+            if (!isLandscape) showTransactionList(0.7, appBar),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () => showAddTransaction(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
