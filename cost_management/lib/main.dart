@@ -62,6 +62,7 @@ class _MyApp extends State<MyHomePage> {
   //   Transaction(
   //       id: "t2", title: "New Books", amount: 9.99, date: DateTime.now())
   // ];
+  var _showList = false;
   List<Transaction> transactions = [];
   void addTransaction(String titleText, double amountTxt, DateTime userDate) {
     var tx = Transaction(
@@ -80,6 +81,10 @@ class _MyApp extends State<MyHomePage> {
       transactions.removeWhere((element) => element.id == id);
     });
   }
+
+  void changeSwitchValue(value) => setState(() {
+        _showList = value;
+      });
 
   List<Transaction> get _recentTransactions {
     return transactions.where((tx) {
@@ -119,29 +124,53 @@ class _MyApp extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Card(
-              child: Container(
-                padding: const EdgeInsets.all(15.0),
-                color: Colors.amberAccent,
-                alignment: Alignment.center,
-                child: SizedBox(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Show List',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                  ),
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                Switch(
+                  value: _showList,
+                  onChanged: (value) {
+                    changeSwitchValue(value);
+                  },
+                ),
+              ],
+            ),
+            !_showList
+                ? Card(
+                    child: Container(
+                      padding: const EdgeInsets.all(15.0),
+                      color: Colors.amberAccent,
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        height: (MediaQuery.of(context).size.height -
+                                MediaQuery.of(context).padding.top -
+                                MediaQuery.of(context).padding.bottom -
+                                kToolbarHeight -
+                                appBar.preferredSize.height) *
+                            0.7,
+                        child: Chart(_recentTransactions),
+                      ),
+                    ),
+                  )
+                : SizedBox(
                     height: (MediaQuery.of(context).size.height -
                             MediaQuery.of(context).padding.top -
                             MediaQuery.of(context).padding.bottom -
                             kToolbarHeight -
                             appBar.preferredSize.height) *
-                        0.3,
-                    child: Chart(_recentTransactions)),
-              ),
-            ),
-            SizedBox(
-                height: (MediaQuery.of(context).size.height -
-                        MediaQuery.of(context).padding.top -
-                        MediaQuery.of(context).padding.bottom -
-                        kToolbarHeight -
-                        appBar.preferredSize.height) *
-                    0.7,
-                child: TransactionCard(transactions, deleteTransaction)),
+                        0.7,
+                    child: TransactionCard(transactions, deleteTransaction),
+                  ),
           ],
         ),
       ),
