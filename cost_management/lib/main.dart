@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -191,10 +193,12 @@ class _MyApp extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () => showAddTransaction(context),
-      ),
+      floatingActionButton: Platform.isAndroid
+          ? FloatingActionButton(
+              child: const Icon(Icons.add),
+              onPressed: () => showAddTransaction(context),
+            )
+          : const SizedBox(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
