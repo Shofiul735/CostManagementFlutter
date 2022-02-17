@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import './widgets/transaction_card.dart';
@@ -20,31 +21,40 @@ void main() {
 class Parent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter App',
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
-        fontFamily: 'Quicksand',
-        textTheme: Theme.of(context).textTheme.copyWith(
-              headline6: const TextStyle(
-                fontFamily: 'OpenSans',
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-              button: const TextStyle(
-                color: Colors.white,
-              ),
+    final themeData = ThemeData(
+      primarySwatch: Colors.purple,
+      fontFamily: 'Quicksand',
+      textTheme: Theme.of(context).textTheme.copyWith(
+            headline6: const TextStyle(
+              fontFamily: 'OpenSans',
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
             ),
-        appBarTheme: const AppBarTheme(
-          titleTextStyle: TextStyle(
-            fontFamily: 'OpenSans',
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
+            button: const TextStyle(
+              color: Colors.white,
+            ),
           ),
+      appBarTheme: const AppBarTheme(
+        titleTextStyle: TextStyle(
+          fontFamily: 'OpenSans',
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
         ),
       ),
-      home: MyHomePage(),
     );
+    return Platform.isAndroid
+        ? MaterialApp(
+            title: 'Flutter App',
+            theme: themeData,
+            home: MyHomePage(),
+          )
+        : CupertinoApp(
+            theme: const CupertinoThemeData(
+              primaryColor: Colors.purple,
+              barBackgroundColor: Colors.purple,
+            ),
+            home: MyHomePage(),
+          );
   }
 }
 
@@ -92,7 +102,7 @@ class _MyApp extends State<MyHomePage> {
     return transactions.where((tx) {
       return tx.date.isAfter(
         DateTime.now().subtract(
-          Duration(days: 7),
+          const Duration(days: 7),
         ),
       );
     }).toList();
@@ -167,20 +177,33 @@ class _MyApp extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
-    final appBar = AppBar(
-      title: const Text("Cost Management App!"),
-      actions: [
-        IconButton(
-          onPressed: () => showAddTransaction(context),
+    var appBar;
+    if (Platform.isAndroid) {
+      appBar = AppBar(
+        title: const Text("Cost Management App!"),
+        actions: [
+          IconButton(
+            onPressed: () => showAddTransaction(context),
+            icon: const Icon(
+              Icons.add,
+            ),
+          )
+        ],
+      );
+    } else {
+      appBar = CupertinoNavigationBar(
+        middle: const Text('Cost Management App'),
+        trailing: IconButton(
           icon: const Icon(
-            Icons.add,
+            CupertinoIcons.add,
+            size: 30,
           ),
-        )
-      ],
-    );
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
+          onPressed: () => showAddTransaction(context),
+        ),
+      );
+    }
+    final appBody = SafeArea(
+      child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -193,13 +216,23 @@ class _MyApp extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: Platform.isAndroid
-          ? FloatingActionButton(
-              child: const Icon(Icons.add),
-              onPressed: () => showAddTransaction(context),
-            )
-          : const SizedBox(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            navigationBar: appBar,
+            child: appBody,
+          )
+        : Scaffold(
+            appBar: appBar,
+            body: appBody,
+            floatingActionButton: Platform.isAndroid
+                ? FloatingActionButton(
+                    child: const Icon(Icons.add),
+                    onPressed: () => showAddTransaction(context),
+                  )
+                : const SizedBox(),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+          );
   }
 }
