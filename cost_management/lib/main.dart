@@ -118,7 +118,9 @@ class _MyApp extends State<MyHomePage> {
         const SizedBox(
           width: 15,
         ),
-        Switch(
+        Switch.adaptive(
+          //apdaptive will return android switch button for android and ios switch button for ios
+          activeColor: Theme.of(context).primaryColorLight,
           value: _showList,
           onChanged: (value) {
             changeSwitchValue(value);
